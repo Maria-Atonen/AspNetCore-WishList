@@ -14,5 +14,11 @@ namespace WishList.Models
         [MaxLength(50)]
         public string Description { get; set; }
 
+        public DateTime Created { get; set; }
+
+        public DateTime Deadline { get; set; }
+
+        public bool Overdue { get; set; }
+
     }
 }

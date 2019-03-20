@@ -1,0 +1,18 @@
+  .main {
+    background-color: #6B5B95;
+  }
+  
+  label {
+  	padding: 2px;
+  }
+  
+  .container{
+  	padding: 10px;
+  }
+  
+  .white{
+  	color: #ffffff;
+  }
+  .error{
+  	color: !important #ff000;
+  }

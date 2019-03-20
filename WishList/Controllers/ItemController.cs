@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using WishList.Data;
+using WishList.Models;
 
 namespace WishList.Controllers
 {
@@ -18,9 +19,24 @@ namespace WishList.Controllers
 
         public IActionResult Index()
         {
-            var model = _context.Items.ToList();
+            List<Item> requests = _context.Items.ToList();
+            requests.Sort((r1, r2) => r1.Deadline.CompareTo(r2.Deadline));
+            SetOverdues(requests);
 
-            return View("Index", model);
+            return View("Index", requests);
+        }
+
+        private List<Item> SetOverdues(List<Item> requests)
+        {
+            DateTime oneHourForward = DateTime.Now.AddHours(1);
+            foreach(Item request in requests)
+            {
+                if (request.Deadline.CompareTo(oneHourForward) < 0)
+                {
+                    request.Overdue = true;
+                }
+            }
+            return requests;
         }
 
         [HttpGet]
@@ -32,6 +48,7 @@ namespace WishList.Controllers
         [HttpPost]
         public IActionResult Create(Models.Item item)
         {
+            item.Created = DateTime.Now;
             _context.Items.Add(item);
             _context.SaveChanges();
             return RedirectToAction("Index");
@@ -44,5 +61,6 @@ namespace WishList.Controllers
             _context.SaveChanges();
             return RedirectToAction("Index");
         }
+
     }
 }

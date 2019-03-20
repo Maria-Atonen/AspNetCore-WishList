@@ -1,9 +1,55 @@
 ﻿@model WishList.Models.Item
 
-<h3>Add item to wishlist</h3>
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Add item to wishlist</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/css/bootstrap.min.css">
 
-<form asp-action="create">
-    <input asp-for="Description" />
-    <span asp-validation-for="Description"></span>
-    <button type="submit">Add Item</button>
-</form>
+</head>
+<body class="main">
+
+    <div id="wrapper">
+        <div id="container" class="container">
+            <h3 class="white">Save Request</h3>
+
+            <form asp-action="create">
+
+                <table class="table">
+                    <tbody>
+                        <tr>
+                            <td><label>Description:</label></td>
+                            <td><input asp-for="Description" /></td>
+                            <td><span asp-validation-for="Description"></span></td>
+                        </tr>
+                        <tr>
+                            <td><label >Deadline:</label></td>
+
+                            <td>                                                          
+                                  <input asp-for="Deadline" class="form-control" />
+                            </td>
+
+                        </tr>
+                        <tr>
+                            <td><label></label></td>
+                            <td><input type="submit" class="btn btn-primary" value="Add Item" /></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </form>
+
+            <div style="clear; both;">
+
+                <p>
+                    <a asp-action="Index" asp-controller="Item">Back to List</a>
+                </p>
+
+            </div>
+
+
+        </div>
+    </div>
+
+</body>
+
+</html>

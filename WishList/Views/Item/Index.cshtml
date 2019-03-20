@@ -1,17 +1,36 @@
 ﻿@model List<WishList.Models.Item>
+<head>
+    <title>List requests</title>
 
-<h1>Wishlits</h1>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/css/bootstrap.min.css">
+</head>
+
+<h1>Wishlist</h1>
+
+
+@if (Model.Count != 0)
+{
+    <table class="table">
+        <tr class="white">
+            <th>Description</th>
+            <th>Created</th>
+            <th>Deadline</th>
+            <th>Action</th>
+        </tr>
+
+
+        @foreach (var item in Model)
+        {
+            <tr @if (item.Overdue) { this.Write("style= color:red"); } >
+                <td>@item.Description</td>
+                <td>@item.Created</td>
+                <td>@item.Deadline</td>
+                <td><a asp-action="delete" asp-route-id="@item.Id">delete</a></td>
+            </tr>
+        }
+
+
+    </table>
+}
 
 <a asp-action="create">Add item</a>
-
-<ul>
-    @foreach(var item in Model)
-    {
-        <li>
-            @item.Description 
-            <a asp-action="delete" asp-route-id="@item.Id">delete</a>
-        </li>
-    }
-
-</ul>
-
