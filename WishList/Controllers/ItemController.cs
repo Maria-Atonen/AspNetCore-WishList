@@ -5,39 +5,28 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using WishList.Data;
 using WishList.Models;
+using WishList.Services;
 
 namespace WishList.Controllers
 {
     public class ItemController : Controller
     {
-        private readonly ApplicationDbContext _context;
+        private ItemService _itemService;
 
-        public ItemController(ApplicationDbContext context)
+        public ItemController(ItemService itemService)
         {
-            _context = context;
+            _itemService = itemService;
+
         }
 
         public IActionResult Index()
         {
-            List<Item> requests = _context.Items.ToList();
-            requests.Sort((r1, r2) => r1.Deadline.CompareTo(r2.Deadline));
-            SetOverdues(requests);
+            var items = _itemService.GetItems();
 
-            return View("Index", requests);
+            return View("Index", items);
         }
 
-        private List<Item> SetOverdues(List<Item> requests)
-        {
-            DateTime oneHourForward = DateTime.Now.AddHours(1);
-            foreach(Item request in requests)
-            {
-                if (request.Deadline.CompareTo(oneHourForward) < 0)
-                {
-                    request.Overdue = true;
-                }
-            }
-            return requests;
-        }
+
 
         [HttpGet]
         public IActionResult Create()
@@ -48,17 +37,13 @@ namespace WishList.Controllers
         [HttpPost]
         public IActionResult Create(Models.Item item)
         {
-            item.Created = DateTime.Now;
-            _context.Items.Add(item);
-            _context.SaveChanges();
+            _itemService.SaveItem(item);
             return RedirectToAction("Index");
         }
 
         public IActionResult Delete(int id)
         {
-            var item = _context.Items.FirstOrDefault(e => e.Id == id);
-            _context.Items.Remove(item);
-            _context.SaveChanges();
+            _itemService.DeleteItem(id);
             return RedirectToAction("Index");
         }
 
